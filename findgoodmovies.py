@@ -9,13 +9,19 @@ import re
 from movieClass import Movie, MovieSearch
 
 
+def findMovies(zipcode):
+	#finds all movies in zipcode
+	if not checkZipCode(zipcode):
+		print "Invalid zipcode"
+		return None
 
-def processMovieTitle(movie):
-	return '+'.join(movie.split(' '))
-
-def checkZipCode(zipcode):
-	#to be filled with regex
-	return True
+	movie_coll = getAllMoviesInArea(zipcode)
+	if movie_coll == None:
+		print "No movies found"
+		return None
+	else:
+		movie_coll.printAll()
+		return movie_coll
 
 def getAllMoviesInArea(zipcode):
 	soup_pages = []
@@ -36,7 +42,12 @@ def getAllMoviesInArea(zipcode):
 	else:
 		return parsePages(soup_pages)
 
+def checkZipCode(zipcode):
+	#checks if zipcode valid
+	return True
+
 def parsePages(pages):
+	#parses google movie search results pages
 	movie_search = MovieSearch()
 	
 	for page in pages:
@@ -56,34 +67,22 @@ def parsePages(pages):
 
 
 def extractMovieTimes(times_text):
+	#makes list of movie times from google movie results strings
 	regex = re.compile("(([1-9]|1[0-2]):([0-5][0-9])(am|pm)?)",re.UNICODE)
 	times_list = regex.findall(times_text)
 	return [first_time[0] for first_time in times_list]
 
-def conatins(list, filter):
-	#to check if movie already exists in list
-	for x in list:
-		if filter(x):
-			return True
 
-	return False
-
-def findGoodMovies(zipcode):
-	if not checkZipCode(zipcode):
-		return False
-
-	movie_coll = getAllMoviesInArea(zipcode)
-	if movie_coll == None:
-		print "No movies found"
-		return False
-	else:
-		movie_coll.printAll()
-		return True
-
+def processMovieTitle(movie):
+	#to be used later
+	return '+'.join(movie.split(' '))
 
 if __name__ == "__main__":
 	if (len(sys.argv) != 2):
 		print "Usage: python mainscript.py <zipcode>"
 	else:
 		zipcode = sys.argv[1]
-		findGoodMovies(zipcode)
+		movie_coll = findMovies(zipcode)
+
+		if movie_coll != None:
+			findIMDBRatings(movie_coll)

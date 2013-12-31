@@ -3,13 +3,16 @@ class MovieSearch:
 		self.movies = []
 
 	def addTimeToMovieOrCreate(self, title, theater, times):
+		#adds movie times to movie and first creates movie if it doesn't exist
 		movie_item = [item for item in self.movies if item.title == title]
 		if len(movie_item) > 0:
 			movie_item[0].addTimes(theater, times)
 		else:
 			self.movies.append(Movie(title, {theater : times}))
+			
 
 	def printAll(self):
+		#prints all data for each movie
 		for each in self.movies:
 			print "Title: " +  each.title
 			for key, value in each.times.iteritems():
