@@ -4,8 +4,11 @@ from urllib2 import urlopen
 from urllib import urlretrieve
 import os
 import sys
+import re
 
-from movieClass import Movie
+from movieClass import Movie, MovieSearch
+
+
 
 def processMovieTitle(movie):
 	return '+'.join(movie.split(' '))
@@ -29,29 +32,33 @@ def getAllMoviesInArea(zipcode):
 		start_int += 10
 
 	if len(soup_pages) == 0:
-		return soup_pages
+		return None
 	else:
-		parsePages(soup_pages)
-
-	return soup_pages
+		return parsePages(soup_pages)
 
 def parsePages(pages):
-	listofmovies = []
+	movie_search = MovieSearch()
+	
 	for page in pages:
 		theaters = page.findAll("div", "theater")
+		
 		for theater in theaters:
 			theater_name = theater.find('h2','name').text
 			theater_movies = theater.findAll('div','movie')
+			
 			for movie in theater_movies:
 				movie_name = movie.find('div','name').text
-				
-				if contains(listofmovies, lambda x: x.title == movie_name):
-					#add times to movie
-				else:
-					#create new movie
-					new_movie = Movie(movie_name)
+				times = extractMovieTimes(movie.find('div','times').text)
+
+				movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times)
+
+	return movie_search
 
 
+def extractMovieTimes(times_text):
+	regex = re.compile("(([1-9]|1[0-2]):([0-5][0-9])(am|pm)?)",re.UNICODE)
+	times_list = regex.findall(times_text)
+	return [first_time[0] for first_time in times_list]
 
 def conatins(list, filter):
 	#to check if movie already exists in list
@@ -64,11 +71,19 @@ def conatins(list, filter):
 def findGoodMovies(zipcode):
 	if not checkZipCode(zipcode):
 		return False
+
+	movie_coll = getAllMoviesInArea(zipcode)
+	if movie_coll == None:
+		print "No movies found"
+		return False
 	else:
-		getAllMoviesInArea(zipcode)
+		movie_coll.printAll()
+		return True
+
 
 if __name__ == "__main__":
 	if (len(sys.argv) != 2):
 		print "Usage: python mainscript.py <zipcode>"
 	else:
+		zipcode = sys.argv[1]
 		findGoodMovies(zipcode)
