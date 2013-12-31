@@ -5,7 +5,7 @@ from urllib import urlretrieve
 import os
 import sys
 
-from movieClass import *
+from movieClass import Movie
 
 def processMovieTitle(movie):
 	return '+'.join(movie.split(' '))
@@ -28,10 +28,38 @@ def getAllMoviesInArea(zipcode):
 		soup = bs(urlopen(url))
 		start_int += 10
 
-	parsePages(soup_pages)
+	if len(soup_pages) == 0:
+		return soup_pages
+	else:
+		parsePages(soup_pages)
 
 	return soup_pages
 
+def parsePages(pages):
+	listofmovies = []
+	for page in pages:
+		theaters = page.findAll("div", "theater")
+		for theater in theaters:
+			theater_name = theater.find('h2','name').text
+			theater_movies = theater.findAll('div','movie')
+			for movie in theater_movies:
+				movie_name = movie.find('div','name').text
+				
+				if contains(listofmovies, lambda x: x.title == movie_name):
+					#add times to movie
+				else:
+					#create new movie
+					new_movie = Movie(movie_name)
+
+
+
+def conatins(list, filter):
+	#to check if movie already exists in list
+	for x in list:
+		if filter(x):
+			return True
+
+	return False
 
 def findGoodMovies(zipcode):
 	if not checkZipCode(zipcode):
