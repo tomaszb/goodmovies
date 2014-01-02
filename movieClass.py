@@ -2,29 +2,40 @@ class MovieSearch:
 	def __init__(self):
 		self.movies = []
 
-	def addTimeToMovieOrCreate(self, title, theater, times):
+	def addTimeToMovieOrCreate(self, title, theater, times, imdb_url):
 		#adds movie times to movie and first creates movie if it doesn't exist
 		movie_item = [item for item in self.movies if item.title == title]
 		if len(movie_item) > 0:
 			movie_item[0].addTimes(theater, times)
 		else:
-			self.movies.append(Movie(title, {theater : times}))
-			
+			self.movies.append(Movie(title, {theater : times}, imdb_url))
+
 
 	def printAll(self):
 		#prints all data for each movie
 		for each in self.movies:
-			print "Title: " +  each.title
-			for key, value in each.times.iteritems():
-				print "  Theater: " + key
-				print "  Times: " + " ".join(value)
-			print "  IMDB Rating: " + str(each.imdb_rating)
+			each.printMovie()
 
 class Movie:
-	def __init__(self, title, times = {}, imdb_rating = 0):
+	def __init__(self, title, times = {}, imdb_url = ""):
 		self.title = title
 		self.times = times
-		self.imdb_rating = imdb_rating
+		self.imdb_url = imdb_url
+		self.imdb_rating = 0.0
+		self.metacritic_rating = 0.0
 
 	def addTimes(self, theater,times):
 		self.times[theater] = times
+
+	def setRatings(self, imdb_rating = 0.0, metacritic_rating = 0.0):
+		self.imdb_rating = float(imdb_rating)
+		self.metacritic_rating = float(metacritic_rating)
+
+	def printMovie(self):
+		print "Title: " +  self.title
+		for key, value in self.times.iteritems():
+			print "  Theater: " + key
+			print "  Times: " + " ".join(value)
+		print "  IMDB Rating: " + str(self.imdb_rating)
+		print "  Metacritic Rating: " + str(self.metacritic_rating)
+		print '\n\n'

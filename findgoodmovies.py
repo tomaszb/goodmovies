@@ -61,7 +61,10 @@ def parsePages(pages):
 				movie_name = movie.find('div','name').text
 				times = extractMovieTimes(movie.find('div','times').text)
 
-				movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times)
+				links_list = movie.findAll('a','fl')
+				movie_imdb_url = extractIMDBUrl(links_list)
+
+				movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times, movie_imdb_url)
 
 	return movie_search
 
@@ -72,17 +75,61 @@ def extractMovieTimes(times_text):
 	times_list = regex.findall(times_text)
 	return [first_time[0] for first_time in times_list]
 
+def extractIMDBUrl(links_list):
+	#finds url for imdb for a specific movie
+	whole_a = [x for x in links_list if "IMDb" in x.text]
+	if (len(whole_a) == 0):
+		return None
+	else:
+		regex = re.compile("http://www.imdb.com/title/tt\d+")
+		print str(whole_a[0])
+		imdb_link = regex.findall(str(whole_a[0]))
+		
+		return imdb_link[0]
+
+
+def findRatings(movie_coll):
+	#to get movie ratings for each movie from each source (first IMDB)
+	for each in movie_coll.movies:
+		imdb, metacritic = getIMDBRating(each.imdb_url)
+		each.setRatings(imdb, metacritic)
+		print "imdb" + imdb
+		print "metacritic" + metacritic
+
+
+def getIMDBRating(url):
+	#get imdb (and metacritic) rating from imdb html
+	
+	soup = bs(urlopen(url))
+	imdb_rating = soup.find('div', 'star-box-giga-star').text.strip()
+	
+	regex = re.compile("Metascore:\s\s\d\d\d?")
+	try:
+		metacritic_rating = regex.findall(soup.find('div','star-box-details').text)[0].split(":")[1].strip()
+	except:
+		metacritic_rating = u'0'
+	
+	return imdb_rating, metacritic_rating
+
+def printFilteredResults(movie_coll, lowest_imdb, lowest_metacritic):
+	imdb = float(lowest_imdb)
+	metacritic = float(lowest_metacritic)
+	for each in movie_coll.movies:
+		if (each.imdb_rating > imdb and each.metacritic_rating > metacritic):
+			each.printMovie()
+
 
 def processMovieTitle(movie):
 	#to be used later
 	return '+'.join(movie.split(' '))
 
 if __name__ == "__main__":
-	if (len(sys.argv) != 2):
-		print "Usage: python mainscript.py <zipcode>"
+	if (len(sys.argv) != 4):
+		print "Usage: python mainscript.py <zipcode> <imdb rating> <metacritic_rating>"
 	else:
 		zipcode = sys.argv[1]
 		movie_coll = findMovies(zipcode)
 
 		if movie_coll != None:
-			findIMDBRatings(movie_coll)
+			findRatings(movie_coll)
+			printFilteredResults(movie_coll, sys.argv[2], sys.argv[3])
