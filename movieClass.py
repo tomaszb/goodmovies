@@ -1,3 +1,7 @@
+from bs4 import BeautifulSoup as bs
+from urllib2 import urlopen
+import re
+
 class MovieSearch:
 	def __init__(self):
 		self.movies = []
@@ -28,8 +32,22 @@ class Movie:
 		self.times[theater] = times
 
 	def setRatings(self, imdb_rating = 0.0, metacritic_rating = 0.0):
-		self.imdb_rating = float(imdb_rating)
+		self.imdb_rating = int(float(imdb_rating)*10)
 		self.metacritic_rating = float(metacritic_rating)
+
+	def getIMDBRating(self):
+		#get imdb (and metacritic) rating from imdb html
+		print "Getting Ratings for %s" % self.title
+		soup = bs(urlopen(self.imdb_url))
+		imdb_rating = soup.find('div', 'star-box-giga-star').text.strip()
+		
+		regex = re.compile("Metascore:\s\s\d\d\d?")
+		try:
+			metacritic_rating = regex.findall(soup.find('div','star-box-details').text)[0].split(":")[1].strip()
+		except:
+			metacritic_rating = u'0'
+
+		self.setRatings(imdb_rating,metacritic_rating)
 
 	def printMovie(self):
 		print "Title: " +  self.title

@@ -91,25 +91,8 @@ def extractIMDBUrl(links_list):
 def findRatings(movie_coll):
 	#to get movie ratings for each movie from each source (first IMDB)
 	for each in movie_coll.movies:
-		imdb, metacritic = getIMDBRating(each.imdb_url)
-		each.setRatings(imdb, metacritic)
-		print "imdb" + imdb
-		print "metacritic" + metacritic
+		each.getIMDBRating()
 
-
-def getIMDBRating(url):
-	#get imdb (and metacritic) rating from imdb html
-	
-	soup = bs(urlopen(url))
-	imdb_rating = soup.find('div', 'star-box-giga-star').text.strip()
-	
-	regex = re.compile("Metascore:\s\s\d\d\d?")
-	try:
-		metacritic_rating = regex.findall(soup.find('div','star-box-details').text)[0].split(":")[1].strip()
-	except:
-		metacritic_rating = u'0'
-	
-	return imdb_rating, metacritic_rating
 
 def printFilteredResults(movie_coll, lowest_imdb, lowest_metacritic):
 	imdb = float(lowest_imdb)
