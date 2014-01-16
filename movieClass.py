@@ -42,6 +42,10 @@ class Movie:
 		self.imdb_url = imdb_url
 		self.imdb_rating = 0.0
 		self.metacritic_rating = 0.0
+		self.googLink = u""
+
+	def createLink(self, zipcode):
+		self.googLink = u"http://www.google.com/movies?near={0}&q={1}".format(zipcode, self.title.replace(" ","+")) 
 
 	def addTimes(self, theater,times):
 		self.times[theater] = times
