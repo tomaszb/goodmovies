@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block body %}
+  <ul class=movies>
+  {% for movie in movies %}
+  	<li> {{ movie.title }} </li>
+  {% endfor %}
+  </ul>
+{% endblock %}

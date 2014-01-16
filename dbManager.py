@@ -12,7 +12,8 @@ class dbMan:
 		Session = sessionmaker(bind = engine)
 		self.session = Session()
 
-	def saveMovie(self, title, imdb = 0, meta = 0, rotten = 0):
+	def saveMovie(self, title, imdbfloat = 0, meta = 0, rotten = 0):
+		imdb = int(imdbfloat*10)
 		movie = Movie(name=title, imdbrating=imdb, metacritic=meta, rottentomatoes=rotten)
 		self.session.add(movie)
 		self.session.commit()
@@ -20,6 +21,18 @@ class dbMan:
 	def returnMovie(self, title):
 		movie = self.session.query(Movie).filter_by(name=title).first()
 		return movie
+
+	def deleteMovies(self):
+		for item in db.session.query(Movie).order_by(Movie.id):
+			self.session.delete(item)
+
+		self.session.commit()
+
+	def returnAll(self):
+		self.session.query(Movie).all()
+
+	def dbDC(self):
+		self.session.close()
 
 class Movie(Base):
 	__tablename__ = 'movies'
@@ -31,7 +44,7 @@ class Movie(Base):
 	rottentomatoes = Column(Integer)
 
 	def __repr__(self):
-		return "<Movie(name='%s', imdbrating='%i', metacritic='%i')>" % (self.name,
+		return "<Movie(name=u'%s', imdbrating='%i', metacritic='%i')>" % (self.name,
 			self.imdbrating,self.metacritic)
 
 

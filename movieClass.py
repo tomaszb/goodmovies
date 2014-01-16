@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup as bs
 from urllib2 import urlopen
 import re
+import dbManager
 
 class MovieSearch:
 	def __init__(self):
@@ -13,6 +14,20 @@ class MovieSearch:
 			movie_item[0].addTimes(theater, times)
 		else:
 			self.movies.append(Movie(title, {theater : times}, imdb_url))
+
+	def getRatings(self):
+		db = dbManager.dbMan()
+		db.dbConnect()
+		for each in self.movies:
+			dbMovie = db.returnMovie(each.title)
+			if dbMovie != None:
+				each.imdb_rating = float(dbMovie.imdbrating/10.0)
+				each.metacritic_rating = dbMovie.metacritic
+			else:
+				each.getIMDBRating()
+				db.saveMovie(each.title, each.imdb_rating, each.metacritic_rating)
+
+		db.dbDC()
 
 
 	def printAll(self):
@@ -32,22 +47,30 @@ class Movie:
 		self.times[theater] = times
 
 	def setRatings(self, imdb_rating = 0.0, metacritic_rating = 0.0):
-		self.imdb_rating = int(float(imdb_rating)*10)
+		self.imdb_rating = float(imdb_rating)
 		self.metacritic_rating = float(metacritic_rating)
 
 	def getIMDBRating(self):
 		#get imdb (and metacritic) rating from imdb html
-		print "Getting Ratings for %s" % self.title
-		soup = bs(urlopen(self.imdb_url))
-		imdb_rating = soup.find('div', 'star-box-giga-star').text.strip()
-		
-		regex = re.compile("Metascore:\s\s\d\d\d?")
-		try:
-			metacritic_rating = regex.findall(soup.find('div','star-box-details').text)[0].split(":")[1].strip()
-		except:
-			metacritic_rating = u'0'
+		if self.imdb_url != None:
 
-		self.setRatings(imdb_rating,metacritic_rating)
+			print "Getting Ratings for %s" % self.title
+			soup = bs(urlopen(self.imdb_url))
+			try:
+				imdb_rating = soup.find('div', 'star-box-giga-star').text.strip()
+			except:
+				imdb_rating = u'0'
+			
+			regex = re.compile("Metascore:\s\s\d\d\d?")
+			try:
+				metacritic_rating = regex.findall(soup.find('div','star-box-details').text)[0].split(":")[1].strip()
+			except:
+				metacritic_rating = u'0'
+
+			self.setRatings(imdb_rating,metacritic_rating)
+
+		else:
+			self.setRatings(u'0',u'0')
 
 	def printMovie(self):
 		print "Title: " +  self.title

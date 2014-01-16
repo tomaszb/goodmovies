@@ -84,14 +84,15 @@ def extractIMDBUrl(links_list):
 		regex = re.compile("http://www.imdb.com/title/tt\d+")
 		print str(whole_a[0])
 		imdb_link = regex.findall(str(whole_a[0]))
-		
-		return imdb_link[0]
+		if len(imdb_link) > 0:
+			return imdb_link[0]
+		else:
+			return None
 
 
 def findRatings(movie_coll):
 	#to get movie ratings for each movie from each source (first IMDB)
-	for each in movie_coll.movies:
-		each.getIMDBRating()
+	movie_coll.getRatings()
 
 
 def printFilteredResults(movie_coll, lowest_imdb, lowest_metacritic):
@@ -101,10 +102,26 @@ def printFilteredResults(movie_coll, lowest_imdb, lowest_metacritic):
 		if (each.imdb_rating > imdb and each.metacritic_rating > metacritic):
 			each.printMovie()
 
+def returnFilteredResults(movie_coll, lowest_imdb, lowest_metacritic):
+	imdb = float(lowest_imdb)
+	metacritic = float(lowest_metacritic)
+	filtered_results = []
+	for each in movie_coll.movies:
+		if (each.imdb_rating > imdb and each.metacritic_rating > metacritic):
+			filtered_results.append(each)
+
+	return filtered_results
+
 
 def processMovieTitle(movie):
 	#to be used later
 	return '+'.join(movie.split(' '))
+
+def Findmovies_main(zipcode,imdbrating, metacritic):
+	movie_coll = findMovies(zipcode)
+	if movie_coll != None:
+		findRatings(movie_coll)
+		return returnFilteredResults(movie_coll, imdbrating, metacritic)
 
 if __name__ == "__main__":
 	if (len(sys.argv) != 4):
