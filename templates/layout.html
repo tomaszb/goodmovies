@@ -1,28 +1,29 @@
-{% extends "bootstrap/base.html" %}
 <!doctype html>
+{% extends "bootstrap/base.html" %}
 <html>
-	{% block head %}
+	<head>
 		{% block styles %}
-		{{super()}}
-		<link rel="stylesheet"
-		      href="/static/css/styles.css">
+			{{super()}}
+			<link rel="stylesheet" href="/static/css/bootstrap-slider.css">
+			<link rel="stylesheet" href="/static/css/styles.css">
+		{% endblock %}
+		{% block scripts %}
+			<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+			<script src="../static/javascript/application.js"></script>
+			{{super()}}
+			<script src="..	/static/javascript/bootstrap-slider.js"></script>
 		{% endblock %}
 		<title>MovieSnob</title>
-	{% endblock %}
+	</head>
 
  	<body>
-	    <div class="navbar navbar-fixed-top">  
-        	<div class="navbar-inner">   
-                    <ul class="nav">  
-	                    <li class="active">  
-	                     <a class="brand" href="#">Flaskpad</a>  
-	                    </li>  
-	                    <li><a href="#">Login</a></li>  
-	                    <li><a href="#">About</a></li>  
-	                    <li><a href="#">Contact</a></li>  
-                	</ul> 
-        	</div>
-    	</div>
+ 		{% block navbar %}
+		    <div class="navbar navbar-inverse navbar-fixed-top">  
+		    	<div class="navbar-header">
+		    		<a class="navbar-brand" href="/">MovieSnob</a>
+		    	</div>
+	    	</div>
+	    {% endblock %}
 		{% block content %}{% endblock %}
 	</body>
 </html>

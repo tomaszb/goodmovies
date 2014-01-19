@@ -35,3 +35,33 @@
     line-height: 175%;
     color: #333;
   }
+
+ .navbar-nav{
+ 	width: 200px;
+ 	margin-left:70%;
+ 	margin-top: 8px !important;
+ }
+
+.main-labels{
+	font-size: 40px !important;
+}
+
+.input-group-lg > .form-control, .input-group-lg > .input-group-addon, .input-group-lg > .input-group-btn > .btn {
+    height: 49px;
+    width: 400px;
+}
+
+#ex1Slider .slider-selection {
+	background: #BABABA;
+}
+
+#ex2Slider .slider-selection {
+	background: #BABABA;
+}
+
+#submit-button{
+	height:100px;
+	margin-top: 20px;
+	margin-left: 450px;
+	width: 400px;
+}

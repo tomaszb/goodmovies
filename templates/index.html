@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block content %}
+	<div class="container">
+		<div class="jumbotron">
+		    <h1 class="main-labels">Enter Zipcode:</h1>
+		        <form action="search">
+		           <div class="input-group input-group-lg">
+		               <input id="zipcode-input" name="zipcode-input" type="text" class="form-control" placeholder="34684">
+		           </div> 
+		           <h1 class="main-labels">Set Minimum Ratings:</h1>
+		           <div id="imdb-setting">
+		           		<h3>Min. IMDB Rating:</h3>
+						<input id="imdb-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="75" data-slider-tooltip="hide" />
+						<label id="imdb-rating-label">7.5</label>
+						<input type="hidden" id="imdb_value" name="imdb-value" value="75" />
+				   </div>
+				   <div id="metacritic-setting">
+		           		<h3>Min. Metacritic Rating:</h3>
+						<input id="metacritic-slider" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="75" data-slider-tooltip="hide" />
+						<label id="metacritic-rating-label">75</label>
+						<input type="hidden" id="metacritic_value" name="metacritic-value" value="75" />
+				   </div>
+				   <button class="btn btn-large btn-primary" id="submit-button" type="submit">Find me movies!</button>
+		        </form>
+
+
+		  </div>
+	</div>
+
+{% endblock %}

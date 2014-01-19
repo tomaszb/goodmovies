@@ -1,24 +1,29 @@
 {% extends "layout.html" %}
+
+{%block navbar %}
+	{{ super() }}
+{% endblock %}
+
 {% block content %}
- <div class="container">
- 	{% for movie in movies %}
- 		<div id="modal">
- 			<header><h1>
-	 			<a href={{ movie.googLink }}>{{ movie.title }}</a> <br>
-	 			IMDB: {{ movie.imdb_rating }} 
-	 			Metacritic: {{ movie.metacritic_rating}} 
-	 		</h1></header>
- 			<section>
-	 			{% for key, value in movie.times.iteritems() %}
-	 				<p><b>Theater: </b> {{ key }}  <br>
-	 				<b>Times:</b>
-	 				{% for time in value %}
-	 					{{ time }}
-	 				{% endfor %}
-	 				</p>
-	 			{% endfor %}
-	 		</section>
- 		</div>
- 	{% endfor %}
-</div>
+	 <div class="container">
+	 	{% for movie in movies %}
+	 		<div id="modal">
+	 			<header><h1>
+		 			<a href={{ movie.googLink }}>{{ movie.title }}</a> <br>
+		 			IMDB: {{ movie.imdb_rating }} 
+		 			Metacritic: {{ movie.metacritic_rating}} 
+		 		</h1></header>
+	 			<section>
+		 			{% for key, value in movie.times.iteritems() %}
+		 				<p><b>Theater: </b> {{ key }}  <br>
+		 				<b>Times:</b>
+		 				{% for time in value %}
+		 					{{ time }}
+		 				{% endfor %}
+		 				</p>
+		 			{% endfor %}
+		 		</section>
+	 		</div>
+	 	{% endfor %}
+	</div>
 {% endblock %}
