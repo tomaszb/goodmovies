@@ -17,7 +17,7 @@ beautifulsoup4==4.3.2
 cssselect==0.9.1
 decorator==3.4.0
 -e hg+http://bitbucket.org/sjl/flask-lesscss@8ce666e083bf045f038533dca50411776f6330a7#egg=flask_lesscss-v0.9.1
-fontforge==1.0
+fontforge
 git-remote-helpers==0.1.0
 gunicorn==18.0
 httplib2==0.8
