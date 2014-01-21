@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request
 from flask_bootstrap import Bootstrap
-from flaskext.lesscss import lesscss
 from findgoodmovies import *
 
 app = Flask(__name__)
