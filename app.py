@@ -28,6 +28,8 @@ def search():
 		return_json = request.args.get('json')
 
 		if return_json != None and return_json == "true":
+			testing = dictifyMovies(movies_filt)
+			print testing
 			return jsonify(dictifyMovies(movies_filt))
 		else:
 			return render_template('search.html', movies=movies_filt)
