@@ -94,6 +94,13 @@ def findRatings(movie_coll):
 	#to get movie ratings for each movie from each source (first IMDB)
 	movie_coll.getRatings()
 
+def dictifyMovies(movie_list):
+	movie_dict = {}
+	
+	for each in movie_list:
+		movie_dict[each.title] = each.dictifyMovie
+
+	return movie_dict
 
 def printFilteredResults(movie_coll, lowest_imdb, lowest_metacritic):
 	imdb = float(lowest_imdb)

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_bootstrap import Bootstrap
 from findgoodmovies import *
 
@@ -12,12 +12,12 @@ def index():
 @app.route('/search', methods=['POST', 'GET'])
 def search():
 	error = None
-	print "got here"
+
 	imdb_value = request.args.get("imdb-value")
 	metacritic_value = request.args.get("metacritic-value")
 	zipcode_value = request.args.get("zipcode-input")
+	
 	if imdb_value != None and metacritic_value != None and zipcode_value != None:
-		print "here now"
 		imdb = float(imdb_value)/10.0
 		metacrit = float(metacritic_value)
 		zipcode = zipcode_value
@@ -25,7 +25,12 @@ def search():
 		for each in movies_filt:
 			each.createLink(zipcode)
 
-		return render_template('search.html', movies=movies_filt)
+		return_json = request.args.get('json')
+
+		if return_json != None and return_json == "true":
+			return jsonify(dictifyMovies(movies_filt))
+		else:
+			return render_template('search.html', movies=movies_filt)
 
 	else:
 		return "Error!"

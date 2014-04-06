@@ -84,3 +84,7 @@ class Movie:
 		print "  IMDB Rating: " + str(self.imdb_rating)
 		print "  Metacritic Rating: " + str(self.metacritic_rating)
 		print '\n\n'
+
+	def dictifyMovie(self):
+		dict_to_ret = {"imdb_url" : self.imdb_url, "imdb_rating" : self.imdb_rating, "metacritic_rating" : self.metacritic_rating, "movietimes" : self.times}
+		return dict_to_ret
