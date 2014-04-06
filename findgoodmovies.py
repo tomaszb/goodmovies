@@ -98,7 +98,7 @@ def dictifyMovies(movie_list):
 	movie_dict = {}
 	
 	for each in movie_list:
-		movie_dict[each.title] = each.dictifyMovie
+		movie_dict[each.title] = each.dictifyMovie()
 
 	return movie_dict
 
