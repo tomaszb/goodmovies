@@ -37,9 +37,9 @@ class MovieSearch:
 
 class Movie:
 	def __init__(self, title, times = {}, imdb_url = ""):
-		self.title = title
-		self.times = times
-		self.imdb_url = imdb_url
+		self.title = title.encode('utf-8')
+		self.times = times.encode('utf-8')
+		self.imdb_url = imdb_url.encode('utf-8')
 		self.imdb_rating = 0.0
 		self.metacritic_rating = 0.0
 		self.googLink = u""
@@ -48,7 +48,7 @@ class Movie:
 		self.googLink = u"http://www.google.com/movies?near={0}&q={1}".format(zipcode, self.title.replace(" ","+")) 
 
 	def addTimes(self, theater,times):
-		self.times[theater] = times
+		self.times[theater] = times.encode('utf-8')
 
 	def setRatings(self, imdb_rating = 0.0, metacritic_rating = 0.0):
 		self.imdb_rating = float(imdb_rating)
