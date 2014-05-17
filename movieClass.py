@@ -13,7 +13,8 @@ class MovieSearch:
 		if len(movie_item) > 0:
 			movie_item[0].addTimes(theater, times)
 		else:
-			self.movies.append(Movie(title, {theater : times}, imdb_url))
+			if imdb_url != None:
+				self.movies.append(Movie(title, {theater : times}, imdb_url))
 
 	def getRatings(self):
 		db = dbManager.dbMan()
