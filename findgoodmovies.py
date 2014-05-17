@@ -26,7 +26,6 @@ def findMovies(zipcode):
 def getAllMoviesInArea(zipcode):
 	soup_pages = []
 	base_url = "http://www.google.com/movies?near={0}".format(zipcode)
-	
 	soup = bs(urlopen(base_url))
 	start_int = 10
 	while (soup.get_text().find("No showtimes") == -1):
@@ -92,7 +91,9 @@ def extractIMDBUrl(links_list):
 
 def findRatings(movie_coll):
 	#to get movie ratings for each movie from each source (first IMDB)
+	print "started ratings"
 	movie_coll.getRatings()
+	print "ended ratings"
 
 def dictifyMovies(movie_list):
 	movie_dict = {}
