@@ -38,7 +38,7 @@ class MovieSearch:
 class Movie:
 	def __init__(self, title, times = {}, imdb_url = ""):
 		self.title = title.encode('utf-8')
-		self.times = times.encode('utf-8')
+		self.times = times
 		self.imdb_url = imdb_url.encode('utf-8')
 		self.imdb_rating = 0.0
 		self.metacritic_rating = 0.0
