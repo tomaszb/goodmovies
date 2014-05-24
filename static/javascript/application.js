@@ -3,6 +3,7 @@ $(document).ready(function() {
 		formater: function(value) {
 			$('#imdb-rating-label').text(value/10);
 			$('#imdb_value').text(value);
+			$('#imdb_value').val(value);
 		}
 	});
 
@@ -10,6 +11,7 @@ $(document).ready(function() {
 		formater: function(value) {
 			$('#metacritic-rating-label').text(value);
 			$('#metacritic_value').text(value);
+			$('#metacritic_value').val(value);
 		}
 	});
 })
