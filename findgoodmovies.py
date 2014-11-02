@@ -46,6 +46,8 @@ def getAllMoviesInArea_Gracenote(zipcode):
 		for theater_name,times in times_dict.items():
 			movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times, movie_name.replace(' ', '+'))
 
+	return movie_search
+
 def getAllMoviesInArea(zipcode):
 	soup_pages = []
 	base_url = "http://www.google.com/movies?near={0}".format(zipcode)
