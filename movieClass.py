@@ -79,7 +79,7 @@ class Movie:
 			self.setRatings(u'0',u'0')
 
 	def getIMDBRating_omdbapi(self):
-		base_url = "http://www.omdbapi.com/?t={0}".format(imdb_url)
+		base_url = "http://www.omdbapi.com/?t={0}".format(self.imdb_url)
 
 		info_dict = json.loads(urlopen(base_url).read())
 
