@@ -7,6 +7,8 @@ import sys
 import re
 
 from movieClass import Movie, MovieSearch
+import time
+import json
 
 
 def findMovies(zipcode):
@@ -15,7 +17,7 @@ def findMovies(zipcode):
 		print "Invalid zipcode"
 		return None
 
-	movie_coll = getAllMoviesInArea(zipcode)
+	movie_coll = getAllMoviesInArea_Gracenote(zipcode)
 	if movie_coll == None:
 		print "No movies found"
 		return None
@@ -23,11 +25,33 @@ def findMovies(zipcode):
 		movie_coll.printAll()
 		return movie_coll
 
+def getAllMoviesInArea_Gracenote(zipcode):
+	movie_search = MovieSearch()
+	base_url = "http://data.tmsapi.com/v1/movies/showings?startDate={0}&zip={1}&api_key=nc2exze38pxshn2z7xw8z5k5".format(time.strftime("%Y-%m-%d"), zipcode)
+	resp = urlopen(base_url)
+	fulljson = json.loads(resp.read())
+
+	for movie in fulljson:
+		movie_name = movie['title']
+		times_dict = {}
+
+		for times in movie['showtimes']:
+			try:
+				print times
+				times_dict[times['theatre']['name']] = times['dateTime'].split('T')[1]
+			except:
+				print "exception hit"
+				print times + "Here!!!"
+
+		for theater_name,times in times_dict.items():
+			movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times, movie_name.replace(' ', '+'))
+
 def getAllMoviesInArea(zipcode):
 	soup_pages = []
 	base_url = "http://www.google.com/movies?near={0}".format(zipcode)
 	soup = bs(urlopen(base_url))
 	start_int = 10
+	return soup.get_text()
 	while (soup.get_text().find("No showtimes") == -1):
 		print start_int
 		soup_pages.append(soup)

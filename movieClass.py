@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup as bs
 from urllib2 import urlopen
 import re
 import dbManager
+import json
 
 class MovieSearch:
 	def __init__(self):
@@ -25,7 +26,7 @@ class MovieSearch:
 				each.imdb_rating = float(dbMovie.imdbrating/10.0)
 				each.metacritic_rating = dbMovie.metacritic
 			else:
-				each.getIMDBRating()
+				each.getIMDBRating_omdbapi()
 				db.saveMovie(each.title, each.imdb_rating, each.metacritic_rating)
 
 		db.dbDC()
@@ -76,6 +77,33 @@ class Movie:
 
 		else:
 			self.setRatings(u'0',u'0')
+
+	def getIMDBRating_omdbapi(self):
+		base_url = "http://www.omdbapi.com/?t={0}".format(imdb_url)
+
+		info_dict = json.loads(urlopen(base_url).read())
+
+		try:
+			imdb_rating = infodict['imdbRating']
+			metacritic_rating = infodict["Metascore"]
+		except:
+			self.setRatings(u'0',u'0')
+			return
+
+		try:
+			int(imdb_rating)
+		except ValueError:
+			imdb_rating = u'0'
+		try:
+			int(metacritic_rating)
+		except ValueError:
+			metacritic_rating = u'0'
+
+		self.setRatings(imdb_rating, metacritic_rating)
+
+
+			#TODO
+			#how to refresh imdb urls which already exist? nvm don't save urls in database
 
 	def printMovie(self):
 		print "Title: " +  self.title

@@ -20,6 +20,7 @@ def search():
 
 	
 	if imdb_value != None and metacritic_value != None and zipcode_value != None:
+		print "find me here" + imdb_value
 		imdb = float(imdb_value)/10.0
 		metacrit = float(metacritic_value)
 		zipcode = zipcode_value
