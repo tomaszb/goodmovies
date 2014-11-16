@@ -30,21 +30,23 @@ def getAllMoviesInArea_Gracenote(zipcode):
 	base_url = "http://data.tmsapi.com/v1/movies/showings?startDate={0}&zip={1}&api_key=nc2exze38pxshn2z7xw8z5k5".format(time.strftime("%Y-%m-%d"), zipcode)
 	resp = urlopen(base_url)
 	fulljson = json.loads(resp.read())
+	print fulljson
+	print "full shit here"
 
 	for movie in fulljson:
 		movie_name = movie['title']
 		times_dict = {}
 
 		for times in movie['showtimes']:
-			try:
-				print times
-				times_dict[times['theatre']['name']] = times['dateTime'].split('T')[1]
-			except:
-				print "exception hit"
-				print times + "Here!!!"
+			
+			if not (times['theatre']['name'] in times_dict):
+				times_dict[times['theatre']['name']] = []
+			
+			times_dict[times['theatre']['name']].append(times['dateTime'].split('T')[1])
 
 		for theater_name,times in times_dict.items():
 			movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times, movie_name.replace(' ', '+'))
+			print "movie_name: " + movie_name + "thether_name: " + theater_name, "times: " + "movie_name: " + movie_name
 
 	return movie_search
 
@@ -133,6 +135,8 @@ def printFilteredResults(movie_coll, lowest_imdb, lowest_metacritic):
 	imdb = float(lowest_imdb)
 	metacritic = float(lowest_metacritic)
 	for each in movie_coll.movies:
+		each.printMovie()
+		print "unfiltered here"
 		if (each.imdb_rating > imdb and each.metacritic_rating > metacritic):
 			each.printMovie()
 

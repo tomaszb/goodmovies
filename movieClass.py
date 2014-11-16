@@ -84,20 +84,20 @@ class Movie:
 		info_dict = json.loads(urlopen(base_url).read())
 
 		try:
-			imdb_rating = infodict['imdbRating']
-			metacritic_rating = infodict["Metascore"]
+			imdb_rating = info_dict['imdbRating']
+			metacritic_rating = info_dict["Metascore"]
 		except:
-			self.setRatings(u'0',u'0')
+			self.setRatings(u'0.0',u'0.0')
 			return
 
 		try:
-			int(imdb_rating)
+			float(imdb_rating)
 		except ValueError:
-			imdb_rating = u'0'
+			imdb_rating = u'0.0'
 		try:
-			int(metacritic_rating)
+			float(metacritic_rating)
 		except ValueError:
-			metacritic_rating = u'0'
+			metacritic_rating = u'0.0'
 
 		self.setRatings(imdb_rating, metacritic_rating)
 
