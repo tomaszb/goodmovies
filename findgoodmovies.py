@@ -45,8 +45,7 @@ def getAllMoviesInArea_Gracenote(zipcode):
 			times_dict[times['theatre']['name']].append(times['dateTime'].split('T')[1])
 
 		for theater_name,times in times_dict.items():
-			movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times, movie_name.replace(' ', '+'))
-			print "movie_name: " + movie_name + "thether_name: " + theater_name, "times: " + "movie_name: " + movie_name
+			movie_search.addTimeToMovieOrCreate(movie_name.encode('utf-8'), theater_name.encode('utf-8'), times.encode('utf-8'), movie_name.replace(' ', '+').encode('utf-8'))
 
 	return movie_search
 
@@ -57,10 +56,8 @@ def getAllMoviesInArea(zipcode):
 	start_int = 10
 	return soup.get_text()
 	while (soup.get_text().find("No showtimes") == -1):
-		print start_int
 		soup_pages.append(soup)
 		url = base_url + "&start={0}".format(start_int)
-		print url
 		soup = bs(urlopen(url))
 		start_int += 10
 
@@ -109,7 +106,6 @@ def extractIMDBUrl(links_list):
 		return None
 	else:
 		regex = re.compile("http://www.imdb.com/title/tt\d+")
-		print str(whole_a[0])
 		imdb_link = regex.findall(str(whole_a[0]))
 		if len(imdb_link) > 0:
 			return imdb_link[0]
@@ -119,9 +115,8 @@ def extractIMDBUrl(links_list):
 
 def findRatings(movie_coll):
 	#to get movie ratings for each movie from each source (first IMDB)
-	print "started ratings"
 	movie_coll.getRatings()
-	print "ended ratings"
+
 
 def dictifyMovies(movie_list):
 	movie_dict = {}

@@ -9,7 +9,7 @@
 	 	{% for movie in movies %}
 	 		<div id="modal">
 	 			<header><h1>
-		 			<a href={{ movie.googLink }}>{{ movie.title }}</a> <br>
+		 			<a href={{ movie.imdb_url }}>{{ movie.title }}</a> <br>
 		 			IMDB: {{ movie.imdb_rating }} 
 		 			Metacritic: {{ movie.metacritic_rating}} 
 		 		</h1></header>
