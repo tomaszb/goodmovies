@@ -45,7 +45,7 @@ def getAllMoviesInArea_Gracenote(zipcode):
 			times_dict[times['theatre']['name']].append(times['dateTime'].split('T')[1])
 
 		for theater_name,times in times_dict.items():
-			movie_search.addTimeToMovieOrCreate(movie_name.encode('utf-8'), theater_name.encode('utf-8'), times.encode('utf-8'), movie_name.replace(' ', '+').encode('utf-8'))
+			movie_search.addTimeToMovieOrCreate(movie_name, theater_name, times, movie_name.replace(' ', '+'))
 
 	return movie_search
 
